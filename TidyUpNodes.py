@@ -7,20 +7,20 @@ def tidyUpNodes(node):
     x = node.xpos()
     y = node.ypos()
     w = node.screenWidth()
-    y = node.screeHeight()
+    h = node.screenHeight()
     for i,n in inputs:
         _x = n.xpos()
         _y = n.ypos()
         _w = n.screenWidth()
-        _h = n.screeHeight()
+        _h = n.screenHeight()
         if n.Class() != 'Dot':
-            if abs(_x-x)>0.5*(w+_w) and (abs(_y-y)>0.5*(_h+h)):
+            if abs(_x-x)>0.5*(w+_w) and (abs(_y-y)>(_h+h)):
                 dot = nuke.nodes.Dot()
                 dot['xpos'].setValue(x+0.5*w-6)
                 dot['ypos'].setValue(_y+0.5*_h-6)
                 dot.setInput(0,n)
                 node.setInput(i,dot)
-                all_nodes.append([dot,n])
+                all_nodes.extend([dot,n])
             elif abs(_x - x)<0.5*(w+_w):
                 n['xpos'].setValue(x)
                 all_nodes.append(n)
@@ -29,13 +29,13 @@ def tidyUpNodes(node):
                 all_nodes.append(n)
     
     for i,n in outputs:
-        nuke.autoplaceSnap(n)
+        # nuke.autoplaceSnap(n)
         _x = n.xpos()
         _y = n.ypos()
         _w = n.screenWidth()
         _h = n.screenHeight()
         if n.Class() != 'Dot':
-            if abs(_x - x)>0.5*(w+_w) and (abs(_y-y)>0.5*(_h+h)):
+            if abs(_x - x)>0.5*(w+_w) and (abs(_y-y)>(_h+h)):
                 dot = nuke.nodes.Dot()
                 dot['xpos'].setValue(_x + 0.5 * w - 6)
                 dot['ypos'].setValue(y + 0.5 *_h - 6)
@@ -44,8 +44,10 @@ def tidyUpNodes(node):
                 all_nodes.extend([dot,n])
             elif abs(_x - x)<0.5*(w+_w):
                 n['xpos'].setValue(x)
+                n['ypos'].setValue(_y)
                 all_nodes.append(n)
             else:
+                n['xpos'].setValue(_x)
                 n['ypos'].setValue(y)
                 all_nodes.append(n)
     return all_nodes
@@ -60,7 +62,7 @@ def main():
 
 def getInputNodes(node):
     inputs = []
-    num_of_inputs = node.inputs
+    num_of_inputs = node.inputs()
     for i in range(num_of_inputs):
         innode = node.input(i)
         if innode:
@@ -82,3 +84,6 @@ def getOutputNodes(node):
                 if innode.name() == node.name():
                     outputs.append((idx,n))
     return outputs
+
+if __name__ == '__main__':
+    main()
