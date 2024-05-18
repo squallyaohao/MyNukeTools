@@ -1,0 +1,94 @@
+#! C:/Program Files/Nuke11.2v3/nuke-11.2.3.dll -nx
+version 11.2 v3
+Gizmo {
+ inputs 2
+ addUserKnob {20 User}
+ addUserKnob {41 translate T Transform1.translate}
+ addUserKnob {41 invert_mask l invert T Merge22.invert_mask}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 800
+  ypos 1101
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 590
+  ypos 852
+ }
+set N2f85b880 [stack 0]
+ Shuffle {
+  green black
+  blue black
+  name Shuffle1
+  xpos 189
+  ypos 960
+ }
+ Transform {
+  translate {2 0}
+  center {1920 540}
+  name Transform1
+  xpos 189
+  ypos 1017
+ }
+push $N2f85b880
+ Shuffle {
+  red black
+  blue black
+  name Shuffle2
+  xpos 323
+  ypos 962
+ }
+ Transform {
+  center {1920 540}
+  name Transform2
+  xpos 323
+  ypos 1019
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels rgb
+  name Merge20
+  xpos 323
+  ypos 1101
+ }
+push $N2f85b880
+ Shuffle {
+  red black
+  green black
+  name Shuffle3
+  xpos 453
+  ypos 961
+ }
+ Transform {
+  translate {{-1*Transform1.translate.left.x} {-1*Transform1.translate.left.y}}
+  center {1920 540}
+  name Transform3
+  xpos 453
+  ypos 1018
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels rgb
+  name Merge21
+  xpos 453
+  ypos 1101
+ }
+push $N2f85b880
+ Merge2 {
+  inputs 2+1
+  name Merge22
+  xpos 594
+  ypos 1101
+ }
+ Output {
+  name Output1
+  xpos 594
+  ypos 1218
+ }
+end_group
